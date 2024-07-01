@@ -9,7 +9,7 @@ const AuthChecker = () => {
   const { login, logout } = useAuth();
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/auth/auth', {
+    fetch(`${API_BASE_URL}/api/auth/auth`, {
       credentials: 'include'
     })
       .then(response => response.json())
