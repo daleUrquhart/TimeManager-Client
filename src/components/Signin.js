@@ -12,7 +12,7 @@ const Signin = () => {
     event.preventDefault();
     console.log('Submitting signin form with', { employeeId, password });
 
-    fetch('http://localhost:5000/api/auth/signin', {
+    fetch(`${process.env.API_BASE_URL}/api/auth/signin`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
