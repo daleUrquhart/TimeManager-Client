@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import InputMask from 'react-input-mask';
 
 const EditEmployee = () => {
   const { id } = useParams();
@@ -46,6 +47,13 @@ const EditEmployee = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const accessValue = parseInt(employee.access);
+    if (!isNaN(accessValue) && (accessValue !== 0 && accessValue !== 1)) {
+      alert('Access value should be either 0 or 1');
+      return;
+    }
+
     try {
       const response = await fetch(`http://localhost:5000/api/employee/${id}`, {
         method: 'PUT',
@@ -56,6 +64,7 @@ const EditEmployee = () => {
         credentials: 'include'
       });
       if (response.ok) {
+        console.log("Employee",employee.id,"updated succesfully")
         navigate('/viewemployees');
       } else {
         console.error('Failed to update employee');
@@ -77,24 +86,43 @@ const EditEmployee = () => {
     <div>
       <h2>Edit Employee</h2>
       <form onSubmit={handleSubmit}>
-        <label>Name:</label>
-        <input type="text" name="name" value={employee.name} onChange={handleChange} required />
-        <br />
-        <label>Address:</label>
-        <input type="text" name="address" value={employee.address} onChange={handleChange} required />
-        <br />
-        <label>Phone Number:</label>
-        <input type="text" name="phonenumber" value={employee.phonenumber} onChange={handleChange} required />
-        <br />
-        <label>Email:</label>
-        <input type="email" name="email" value={employee.email} onChange={handleChange} required />
-        <br />
-        <label>Date Started:</label>
-        <input type="date" name="datestarted" value={employee.datestarted} onChange={handleChange} required />
-        <br />
-        <label>Access:</label>
-        <input type="text" name="access" value={employee.access} onChange={handleChange} required />
-        <br />
+        <div>
+          <label>Name:</label>
+          <input type="text" name="name" value={employee.name || ''} onChange={handleChange} required />
+        </div>
+        <div>
+          <label>Address:</label>
+          <input type="text" name="address" value={employee.address || ''} onChange={handleChange} required />
+        </div>
+        <div>
+          <label>Phone Number:</label>
+          <InputMask
+            mask="999-999-9999"
+            maskChar="_"
+            type="text"
+            name="phonenumber"
+            value={employee.phonenumber || ''}
+            onChange={handleChange}
+            required
+          />
+          <small>Format: 999-999-9999</small>
+        </div>
+        <div>
+          <label>Email:</label>
+          <input type="email" name="email" value={employee.email || ''} onChange={handleChange} required />
+        </div>
+        <div>
+          <label>Date Started:</label>
+          <input type="date" name="datestarted" value={employee.datestarted || ''} onChange={handleChange} required />
+        </div>
+        <div>
+          <label>Access:</label>
+          <select name="access" value={employee.access.toString() || ''} onChange={handleChange} required>
+            <option value="">Select Access</option>
+            <option value="0">0 - Admin</option>
+            <option value="1">1 - User</option>
+          </select>
+        </div>
         <button type="submit">Update Employee</button>
       </form>
     </div>

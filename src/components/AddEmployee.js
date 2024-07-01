@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import InputMask from 'react-input-mask';
 
@@ -15,6 +15,7 @@ const AddEmployee = () => {
   });
 
   const navigate = useNavigate();
+  const phoneNumberRef = useRef(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,12 +27,12 @@ const AddEmployee = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
- 
+
     if (!formData.id || isNaN(formData.id)) {
       alert('Please enter a valid Employee ID (numeric value)');
       return;
     }
- 
+
     const accessValue = parseInt(formData.access);
     if (!isNaN(accessValue) && (accessValue !== 0 && accessValue !== 1)) {
       alert('Access value should be either 0 or 1');
@@ -87,6 +88,7 @@ const AddEmployee = () => {
             name="phonenumber"
             value={formData.phonenumber}
             onChange={handleChange}
+            inputRef={phoneNumberRef} // Use ref for inputMask
             required
           />
           <small>Format: 999-999-9999</small>

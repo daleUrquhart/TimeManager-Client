@@ -29,7 +29,7 @@ const AddTime = () => {
                 throw new Error('Failed to fetch workorders');
             }
             const data = await response.json();
-            const workorderNumbers = data.jobData.map(job => job.Workorder);
+            const workorderNumbers = data.jobData.map(job => job.workorder);
             setWorkorders(workorderNumbers);
             console.log(workorderNumbers);
         } catch (error) {

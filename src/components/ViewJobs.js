@@ -17,11 +17,14 @@ const ViewJobs = () => {
       const response = await fetch('http://localhost:5000/api/jobdata', {
         credentials: 'include'
       });
-
+  
       if (response.ok) {
         const data = await response.json();
-        if (Array.isArray(data.jobData)) {
-          const sortedJobs = data.jobData.sort((a, b) => a.Customer.localeCompare(b.Customer));
+        console.log("Retrieved job data:",data)
+
+        if (Array.isArray(data.jobData)) { 
+          const validJobs = data.jobData.filter(job => job.customer !== undefined && job.customer !== null);   
+          const sortedJobs = validJobs.sort((a, b) => a.customer.localeCompare(b.customer));  
           setJobs(sortedJobs);
         } else {
           console.error('Unexpected response data:', data.jobData);
@@ -36,7 +39,7 @@ const ViewJobs = () => {
       setJobs([]);
     }
   };
-
+  
   const handleEdit = (workorder) => {
     console.log("Editing job with workorder:", workorder);
     navigate(`/editjob/${workorder}`);
@@ -54,7 +57,7 @@ const ViewJobs = () => {
       });
 
       if (response.ok) {
-        setJobs(prevJobs => prevJobs.filter(job => job.Workorder !== workorder));
+        setJobs(prevJobs => prevJobs.filter(job => job.workorder !== workorder));
         window.location.reload();
       } else {
         console.error('Error toggling currentJob:', response.statusText);
@@ -97,10 +100,10 @@ const ViewJobs = () => {
   };
 
   const filteredJobs = jobs.filter(job =>
-    job.Customer.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    job.Address.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    job.Workorder.toString().includes(searchTerm) ||
-    job.Property.toLowerCase().includes(searchTerm.toLowerCase())
+    job.customer.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    job.address.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    job.workorder.toString().includes(searchTerm) ||
+    job.property.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -119,33 +122,33 @@ const ViewJobs = () => {
       <input
         type="text"
         className="form-control mb-3"
-        placeholder="Search by Customer, Workorder, Property, or Address"
+        placeholder="Search by customer, workorder, property, or address"
         value={searchTerm}
         onChange={handleSearch}
       />
       <table className="table table-striped">
         <thead>
           <tr>
-            <th>Workorder</th>
-            <th>Customer</th>
-            <th>Property</th>
-            <th>Address</th> 
+            <th>workorder</th>
+            <th>customer</th>
+            <th>property</th>
+            <th>address</th> 
           </tr>
         </thead>
         <tbody>
           {filteredJobs.map(job => (
-            <tr key={job.Workorder}>
-              <td>{job.Workorder}</td>
-              <td>{job.Customer}</td>
-              <td>{job.Property}</td>
-              <td>{job.Address}</td>
+            <tr key={job.workorder}>
+              <td>{job.workorder}</td>
+              <td>{job.customer}</td>
+              <td>{job.property}</td>
+              <td>{job.address}</td>
               <td>
                 {isAdmin && (
                   <>
-                    <button className="btn btn-sm btn-outline-primary me-2" onClick={() => handleEdit(job.Workorder)}>
+                    <button className="btn btn-sm btn-outline-primary me-2" onClick={() => handleEdit(job.workorder)}>
                       Edit
                     </button>
-                    <button className="btn btn-sm btn-outline-danger" onClick={() => handleDelete(job.Workorder)}>
+                    <button className="btn btn-sm btn-outline-danger" onClick={() => handleDelete(job.workorder)}>
                       Delete
                     </button>
                   </>
