@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from './AuthContext';
 import { useNavigate } from 'react-router-dom';
+const API_URL = process.env.REACT_APP_API_BASE_URL
 
 const Signin = () => {
   const [employeeId, setEmployeeId] = useState('');
@@ -12,7 +13,7 @@ const Signin = () => {
     event.preventDefault();
     console.log('Submitting signin form with', { employeeId, password });
 
-    fetch(`${process.env.API_BASE_URL}/api/auth/signin`, {
+    fetch(`${API_URL}/api/auth/signin`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

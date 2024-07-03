@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from './AuthContext';
+//const API_URL = process.env.REACT_APP_API_BASE_URL
 
 const Home = () => {
   const { isAuthenticated, isAdmin } = useAuth();  

@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Home, Signin, ViewTime, ViewJobs, ExportTime, EditEmployee, AddTime, AddJob, AddEmployee, ViewEmployees, EditTime, EditJob } from './components';
 import PrivateRoute from './components/PrivateRoute';
 import { AuthProvider, useAuth } from './components/AuthContext';
 import { createRoot } from 'react-dom/client';
+const API_URL = process.env.REACT_APP_API_BASE_URL
 
 const AuthChecker = () => {
-  const { login, logout } = useAuth();
+  const { login, logout } = useAuth(); 
+  console.log(API_URL)
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/api/auth/auth`, {
+    fetch(`${API_URL}/api/auth/auth`, {
       credentials: 'include'
     })
       .then(response => response.json())
